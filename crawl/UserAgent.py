@@ -13,8 +13,11 @@ class Random_User_Agents:
     """
 
     def __init__(self):
-        """初始化实例，创建数据存储结构并加载用户代理数据
-        Initialize instance, create data storage structures and load user agent data"""
+        """
+        初始化实例，创建数据存储结构并加载用户代理数据
+
+        Initialize instance, create data storage structures and load user agent data
+        """
         # 存储所有用户代理的列表 / List to store all user agents
         self.user_agents = []
         # 按浏览器分类存储用户代理的字典 / Dictionary to store user agents by browser type
