@@ -162,12 +162,14 @@ class __UserAgentAnalyzer:
         self.analysis_result["Browser_version"] = self.browser_version
 
 
-def check(arg):
-    if isinstance(arg, str):
-        return __UserAgentAnalyzer()._UserAgentAnalyzer__analyze(arg)
-    elif isinstance(arg, list) and all(isinstance(item, str) for item in arg):
+def check(User_Agent: str | list):
+    if isinstance(User_Agent, str):
+        return __UserAgentAnalyzer()._UserAgentAnalyzer__analyze(User_Agent)
+    elif isinstance(User_Agent, list) and all(
+        isinstance(item, str) for item in User_Agent
+    ):
         result = {}
-        for user_agent in arg:
+        for user_agent in User_Agent:
             result[user_agent] = __UserAgentAnalyzer()._UserAgentAnalyzer__analyze(
                 user_agent
             )
