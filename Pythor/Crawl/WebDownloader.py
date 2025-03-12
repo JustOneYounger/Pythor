@@ -23,17 +23,13 @@ class WebDownloader:
         read_timeout: int = 60,
     ):
         if min_delay > max_delay:
-            raise ValueError(
-                f"min_delay ({min_delay}) must be ≤ max_delay ({max_delay})"
-            )
+            raise ValueError(f"min_delay ({min_delay}) must be ≤ max_delay ({max_delay})")
         self.urls = urls
         self.save_dir = save_dir or os.getcwd()
         self.workers = workers
         self.min_delay = min_delay
         self.max_delay = max_delay
-        self.timeout = aiohttp.ClientTimeout(
-            connect=connect_timeout, sock_read=read_timeout
-        )
+        self.timeout = aiohttp.ClientTimeout(connect=connect_timeout, sock_read=read_timeout)
         os.makedirs(self.save_dir, exist_ok=True)
 
     async def __download_file(self, session, url: str):
@@ -50,9 +46,7 @@ class WebDownloader:
                     "Accept-Language": "en-US,en;q=0.5",
                 }
 
-                async with session.get(
-                    url, headers=headers, timeout=self.timeout
-                ) as response:
+                async with session.get(url, headers=headers, timeout=self.timeout) as response:
                     if response.status != 200:
                         raise aiohttp.ClientError(f"HTTP error {response.status}")
 
@@ -79,9 +73,7 @@ class WebDownloader:
             except Exception as e:
                 if attempt < max_retries - 1:
                     wait_time = 2**attempt
-                    logging.warning(
-                        f"Retrying {file_name} in {wait_time}s... (attempt {attempt+1}/{max_retries})"
-                    )
+                    logging.warning(f"Retrying {file_name} in {wait_time}s... (attempt {attempt+1}/{max_retries})")
                     await asyncio.sleep(wait_time)
                 else:
                     self.__handle_exception(file_name, e)

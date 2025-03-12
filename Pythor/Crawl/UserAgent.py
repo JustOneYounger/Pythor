@@ -34,9 +34,7 @@ class Random_User_Agents:
             "safari",
         ]
         if browser not in valid_browsers:
-            raise ValueError(
-                f"Error: Browser '{browser}' not found. Valid options are: {valid_browsers}"
-            )
+            raise ValueError(f"Error: Browser '{browser}' not found. Valid options are: {valid_browsers}")
         browser_agents = self.browsers_dict.get(browser, [])
         if number == 1:
             return random.choice(browser_agents)

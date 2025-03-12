@@ -43,37 +43,16 @@ class __UserAgentAnalyzer:
         }
 
         self.browser_patterns = [
-            (
-                "Edge",
-                re.compile(r"Edge/(\d+\.\d+\.\d+\.\d+)"),
-            ),
-            (
-                "Edge",
-                re.compile(r"Edg/([\d.]+)"),
-            ),
+            ("Edge",re.compile(r"Edge/(\d+\.\d+\.\d+\.\d+)")),
+            ("Edge",re.compile(r"Edg/([\d.]+)")),
             ("Chrome", re.compile(r"Chrome/([\d.]+)")),
-            (
-                "Firefox",
-                re.compile(r"Firefox/([\d.]+)"),
-            ),
-            (
-                "Safari",
-                re.compile(r"Version/([\d.]+).* Safari/"),
-            ),
+            ("Firefox",re.compile(r"Firefox/([\d.]+)")),
+            ("Safari",re.compile(r"Version/([\d.]+).* Safari/")),
             ("Opera", re.compile(r"OPR/([\d.]+)")),
-            (
-                "Opera",
-                re.compile(r"Opera/([\d.]+)"),
-            ),
-            (
-                "Safari",
-                re.compile(r"Safari/([\d.]+)"),
-            ),
+            ("Opera",re.compile(r"Opera/([\d.]+)")),
+            ("Safari",re.compile(r"Safari/([\d.]+)")),
             ("IE", re.compile(r"MSIE ([\d.]+)")),
-            (
-                "IE",
-                re.compile(r"Trident/.*?rv:([\d.]+)"),
-            ),
+            ("IE",re.compile(r"Trident/.*?rv:([\d.]+)")),
         ]
         self.exclude_safari_pattern = re.compile(r"Chrome/|Edg/")
 
@@ -97,10 +76,7 @@ class __UserAgentAnalyzer:
         windows_nt_match = self.windows_nt_pattern.search(self.os_architecture)
         if windows_nt_match:
             nt_version = windows_nt_match.group(1)
-            self.analysis_result["OS"] = self.windows_versions.get(
-                nt_version,
-                f"Windows NT {nt_version}",
-            )
+            self.analysis_result["OS"] = self.windows_versions.get(nt_version,f"Windows NT {nt_version}",)
             return
 
         mac_os_match = self.mac_os_pattern.search(self.os_architecture)
@@ -119,11 +95,7 @@ class __UserAgentAnalyzer:
             android_version_match = self.android_version_pattern.search(
                 self.os_architecture
             )
-            self.analysis_result["OS"] = (
-                f"Android {android_version_match.group(1)}"
-                if android_version_match
-                else "Android"
-            )
+            self.analysis_result["OS"] = (f"Android {android_version_match.group(1)}" if android_version_match else "Android")
             return
 
         if "Linux" in self.os_architecture:
@@ -165,16 +137,10 @@ class __UserAgentAnalyzer:
 def check(User_Agent: str | list):
     if isinstance(User_Agent, str):
         return __UserAgentAnalyzer()._UserAgentAnalyzer__analyze(User_Agent)
-    elif isinstance(User_Agent, list) and all(
-        isinstance(item, str) for item in User_Agent
-    ):
+    elif isinstance(User_Agent, list) and all(isinstance(item, str) for item in User_Agent):
         result = {}
         for user_agent in User_Agent:
-            result[user_agent] = __UserAgentAnalyzer()._UserAgentAnalyzer__analyze(
-                user_agent
-            )
+            result[user_agent] = __UserAgentAnalyzer()._UserAgentAnalyzer__analyze(user_agent)
         return result
     else:
-        raise TypeError(
-            "The parameter type is incorrect. The User Agent parser requires a string or a list of strings"
-        )
+        raise TypeError("The parameter type is incorrect. The User Agent parser requires a string or a list of strings")
