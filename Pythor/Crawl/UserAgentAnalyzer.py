@@ -56,18 +56,18 @@ class __UserAgentAnalyzer:
         ]
         self.exclude_safari_pattern = re.compile(r"Chrome/|Edg/")
 
-    def __analyze(self, user_agent):
+    def __analyze__(self, user_agent):
         self.user_agent = user_agent
         self.analysis_result = {key: "Unknown" for key in self.analysis_result}
         self.os_architecture = ""
         self.browser_version = "Unknown"
-        self.__parse_OS()
-        self.__parse_OS_architecture()
-        self.__parse_Browser()
-        self.__parse_Browser_version()
+        self.__parse_OS__()
+        self.__parse_OS_architecture__()
+        self.__parse_Browser__()
+        self.__parse_Browser_version__()
         return self.analysis_result
 
-    def __parse_OS(self):
+    def __parse_OS__(self):
         os_match = self.os_pattern.search(self.user_agent)
         if not os_match:
             self.analysis_result["OS"] = "Unknown"
@@ -103,7 +103,7 @@ class __UserAgentAnalyzer:
             return
         self.analysis_result["OS"] = self.os_architecture.split(";")[0].strip()
 
-    def __parse_OS_architecture(self):
+    def __parse_OS_architecture__(self):
         if not self.os_architecture:
             return
         os_arch = self.os_architecture
@@ -119,7 +119,7 @@ class __UserAgentAnalyzer:
         else:
             self.analysis_result["OS_architecture"] = "Unknown"
 
-    def __parse_Browser(self):
+    def __parse_Browser__(self):
         for name, pattern in self.browser_patterns:
             match = pattern.search(self.user_agent)
             if not match:
@@ -130,17 +130,17 @@ class __UserAgentAnalyzer:
             self.browser_version = match.group(1)
             break
 
-    def __parse_Browser_version(self):
+    def __parse_Browser_version__(self):
         self.analysis_result["Browser_version"] = self.browser_version
 
 
 def check(User_Agent: str | list):
     if isinstance(User_Agent, str):
-        return __UserAgentAnalyzer()._UserAgentAnalyzer__analyze(User_Agent)
+        return __UserAgentAnalyzer()._UserAgentAnalyzer__analyze__(User_Agent)
     elif isinstance(User_Agent, list) and all(isinstance(item, str) for item in User_Agent):
         result = {}
         for user_agent in User_Agent:
-            result[user_agent] = __UserAgentAnalyzer()._UserAgentAnalyzer__analyze(user_agent)
+            result[user_agent] = __UserAgentAnalyzer()._UserAgentAnalyzer__analyze__(user_agent)
         return result
     else:
         raise TypeError("The parameter type is incorrect. The User Agent parser requires a string or a list of strings")

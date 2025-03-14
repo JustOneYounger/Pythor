@@ -32,7 +32,7 @@ class WebDownloader:
         self.timeout = aiohttp.ClientTimeout(connect=connect_timeout, sock_read=read_timeout)
         os.makedirs(self.save_dir, exist_ok=True)
 
-    async def __download_file(self, session, url: str):
+    async def __download_file__(self, session, url: str):
         max_retries = 3
         file_name = os.path.basename(url)
 
@@ -50,7 +50,7 @@ class WebDownloader:
                     if response.status != 200:
                         raise aiohttp.ClientError(f"HTTP error {response.status}")
 
-                    save_path = self.__get_unique_path(file_name)
+                    save_path = self.__get_unique_path__(file_name)
                     total_size = int(response.headers.get("content-length", 0))
 
                     with tqdm(
@@ -76,9 +76,9 @@ class WebDownloader:
                     logging.warning(f"Retrying {file_name} in {wait_time}s... (attempt {attempt+1}/{max_retries})")
                     await asyncio.sleep(wait_time)
                 else:
-                    self.__handle_exception(file_name, e)
+                    self.__handle_exception__(file_name, e)
 
-    def __handle_exception(self, file_name, e):
+    def __handle_exception__(self, file_name, e):
         error_msg = f"Failed to download {file_name}: {str(e)}"
         if isinstance(e, aiohttp.ClientError):
             if isinstance(e, aiohttp.ClientConnectionError):
@@ -110,7 +110,7 @@ class WebDownloader:
 
         logging.error(error_msg)
 
-    def __get_unique_path(self, file_name):
+    def __get_unique_path__(self, file_name):
         base, ext = os.path.splitext(file_name)
         counter = 1
         while True:
@@ -120,14 +120,14 @@ class WebDownloader:
             file_name = f"{base}_{counter}{ext}"
             counter += 1
 
-    async def __run_downloads(self):
+    async def __run_downloads__(self):
         connector = aiohttp.TCPConnector(limit=self.workers)
         async with aiohttp.ClientSession(connector=connector) as session:
-            tasks = [self.__download_file(session, url) for url in self.urls]
+            tasks = [self.__download_file__(session, url) for url in self.urls]
             results = await asyncio.gather(*tasks, return_exceptions=True)
             failed = sum(1 for r in results if isinstance(r, Exception))
             if failed:
                 logging.error(f"Download completed with {failed} errors")
 
     def start(self):
-        asyncio.run(self.__run_downloads())
+        asyncio.run(self.__run_downloads__())

@@ -10,12 +10,12 @@ class __AgentIPAnalyzer:
         self.target_url = target_url
         self.timeout = timeout
 
-    def __run(self):
+    def __run__(self):
         valid_ip = []
         invalid_ip = []
         for ip in tqdm(self.proxy_ip, desc="Proxy Test"):
-            if isinstance(ip, str) and self.__validate_proxy_format(ip):
-                if self.__parse(ip) == True:
+            if isinstance(ip, str) and self.__validate_proxy_format__(ip):
+                if self.__parse__(ip) == True:
                     valid_ip.append(ip)
                 else:
                     invalid_ip.append(ip)
@@ -30,11 +30,11 @@ class __AgentIPAnalyzer:
                 invalid_ip.append(ip)
         return valid_ip, invalid_ip, self.log
 
-    def __validate_proxy_format(self, ip: str):
+    def __validate_proxy_format__(self, ip: str):
         pattern = r"^(?:\d{1,3}\.){3}\d{1,3}:\d{1,5}$|^[a-zA-Z0-9.-]+:\d{1,5}$"
         return re.match(pattern, ip) is not None
 
-    def __parse(self, ip: str):
+    def __parse__(self, ip: str):
         parse_log = {
             "Agent_IP": ip,
             "Target_URL": self.target_url,
@@ -99,7 +99,7 @@ def IP_Connect(ip: str | list, target_url: str, log: bool = False, timeout: int 
     else:
         raise TypeError("The parameter type is incorrect. Agent IP requires a string or a list of strings")
 
-    valid_ip, invalid_ip, return_log = __AgentIPAnalyzer(proxy_ip=ip_list, target_url=target_url, timeout=timeout)._AgentIPAnalyzer__run()
+    valid_ip, invalid_ip, return_log = __AgentIPAnalyzer(proxy_ip=ip_list, target_url=target_url, timeout=timeout)._AgentIPAnalyzer__run__()
     if log == True:
         return valid_ip, invalid_ip, return_log
     else:
