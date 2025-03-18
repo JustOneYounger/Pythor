@@ -136,11 +136,11 @@ class __UserAgentAnalyzer:
 
 def check(User_Agent: str | list):
     if isinstance(User_Agent, str):
-        return __UserAgentAnalyzer()._UserAgentAnalyzer__analyze__(User_Agent)
+        return __UserAgentAnalyzer().__analyze__(User_Agent)
     elif isinstance(User_Agent, list) and all(isinstance(item, str) for item in User_Agent):
         result = {}
         for user_agent in User_Agent:
-            result[user_agent] = __UserAgentAnalyzer()._UserAgentAnalyzer__analyze__(user_agent)
+            result[user_agent] = __UserAgentAnalyzer().__analyze__(user_agent)
         return result
     else:
         raise TypeError("The parameter type is incorrect. The User Agent parser requires a string or a list of strings")

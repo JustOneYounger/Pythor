@@ -45,7 +45,9 @@ class __AgentIPAnalyzer:
         proxies = {"http": ip, "https": ip}
 
         try:
-            response = requests.get(self.target_url, proxies=proxies, timeout=self.timeout)
+            response = requests.get(
+                self.target_url, proxies=proxies, timeout=self.timeout
+            )
             parse_log["Status_Code"] = str(response.status_code)
 
             if response.ok:
@@ -55,11 +57,15 @@ class __AgentIPAnalyzer:
                 return True
             else:
                 parse_log["Status"] = "Fail"
-                parse_log["Describe"] = f"Proxy {ip} failed with code {response.status_code}"
+                parse_log["Describe"] = (
+                    f"Proxy {ip} failed with code {response.status_code}"
+                )
 
         except requests.exceptions.ProxyError as e:
             # 代理服务器返回错误响应
-            parse_log["Status_Code"] = str(e.response.status_code) if e.response else "407"
+            parse_log["Status_Code"] = (
+                str(e.response.status_code) if e.response else "407"
+            )
             parse_log["Status"] = "Proxy Error"
             parse_log["Describe"] = f"{e} (Check proxy config)"
 
@@ -71,19 +77,25 @@ class __AgentIPAnalyzer:
 
         except requests.exceptions.SSLError as e:
             # SSL错误
-            parse_log["Status_Code"] = str(e.response.status_code) if hasattr(e, "response") else "495"
+            parse_log["Status_Code"] = (
+                str(e.response.status_code) if hasattr(e, "response") else "495"
+            )
             parse_log["Status"] = "SSL Error"
             parse_log["Describe"] = f"{e} (Check certificate)"
 
         except requests.exceptions.ConnectionError as e:
             # 目标拒绝连接
-            parse_log["Status_Code"] = str(e.response.status_code) if hasattr(e, "response") else "503"
+            parse_log["Status_Code"] = (
+                str(e.response.status_code) if hasattr(e, "response") else "503"
+            )
             parse_log["Status"] = "Connection Failed"
             parse_log["Describe"] = f"{e} (Check network/URL)"
 
         except requests.exceptions.RequestException as e:
             # 其他异常
-            parse_log["Status_Code"] = str(e.response.status_code) if hasattr(e, "response") else "500"
+            parse_log["Status_Code"] = (
+                str(e.response.status_code) if hasattr(e, "response") else "500"
+            )
             parse_log["Status"] = "Request Error"
             parse_log["Describe"] = f"{e} (Check request)"
 
@@ -97,9 +109,13 @@ def IP_Connect(ip: str | list, target_url: str, log: bool = False, timeout: int 
     elif isinstance(ip, list) and all(isinstance(item, str) for item in ip):
         ip_list = ip
     else:
-        raise TypeError("The parameter type is incorrect. Agent IP requires a string or a list of strings")
+        raise TypeError(
+            "The parameter type is incorrect. Agent IP requires a string or a list of strings"
+        )
 
-    valid_ip, invalid_ip, return_log = __AgentIPAnalyzer(proxy_ip=ip_list, target_url=target_url, timeout=timeout)._AgentIPAnalyzer__run__()
+    valid_ip, invalid_ip, return_log = __AgentIPAnalyzer(
+        proxy_ip=ip_list, target_url=target_url, timeout=timeout
+    ).__run__()
     if log == True:
         return valid_ip, invalid_ip, return_log
     else:
